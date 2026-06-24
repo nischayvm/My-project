@@ -38,6 +38,7 @@ public class CarController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        engineLoopAudio = GetComponents<AudioSource>()[0];
 
         if (mainCamera == null)
             mainCamera = Camera.main;
