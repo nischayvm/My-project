@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LapTimer : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class LapTimer : MonoBehaviour
     public TMP_Text announcementText;
 
     private float currentLapTime = 0f;
-    private float bestLapTime = Mathf.Infinity;
+    public float bestLapTime = Mathf.Infinity;
+    public List<float> lapHistory = new List<float>();
     private int completedLaps = 0;
     private bool running = false;
     private Coroutine announcementCoroutine;
@@ -80,6 +82,8 @@ public class LapTimer : MonoBehaviour
                 ShowAnnouncement("LAP COMPLETE!");
             }
 
+            lapHistory.Add(currentLapTime);
+
             // Reset current lap time, but keep running
             currentLapTime = 0f;
         }
@@ -110,7 +114,7 @@ public class LapTimer : MonoBehaviour
         announcementText.gameObject.SetActive(false);
     }
 
-    private string FormatTime(float time)
+    public string FormatTime(float time)
     {
         int minutes = Mathf.FloorToInt(time / 60);
         float seconds = time % 60;
