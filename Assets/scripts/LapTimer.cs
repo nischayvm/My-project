@@ -116,6 +116,11 @@ public class LapTimer : MonoBehaviour
 
     public string FormatTime(float time)
     {
+        if (time <= 0 || float.IsInfinity(time))
+        {
+            return "--:--.---";
+        }
+
         int minutes = Mathf.FloorToInt(time / 60);
         float seconds = time % 60;
         return string.Format("{0:00}:{1:00.000}", minutes, seconds);

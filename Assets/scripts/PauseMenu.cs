@@ -40,11 +40,19 @@ public class PauseMenu : MonoBehaviour
         if (lapTimer == null)
             return;
 
-        bestLapText.text =
-            "BEST LAP\n" +
-            lapTimer.FormatTime(
-                lapTimer.bestLapTime
-            );
+        if (lapTimer.bestLapTime <= 0 || float.IsInfinity(lapTimer.bestLapTime))
+        {
+            bestLapText.text =
+                "BEST LAP\n--:--.---";
+        }
+        else
+        {
+            bestLapText.text =
+                "BEST LAP\n" +
+                lapTimer.FormatTime(
+                    lapTimer.bestLapTime
+                );
+        }
 
         recentLapsText.text = "";
 
