@@ -3,12 +3,12 @@ using UnityEngine;
 public class CarController : MonoBehaviour
 {
     [Header("Movement")]
-    public float acceleration = 80f;
-    public float maxSpeed = 100f;
-    public float reverseSpeed = 20f;
-    public float brakeForce = 150f;
-    public float turnSpeed = 120f;
-    public float downforceStrength = 120f;
+    public float acceleration = 120f;
+    public float maxSpeed = 140f;
+    public float reverseSpeed = 15f;
+    public float brakeForce = 80f;
+    public float turnSpeed = 140f;
+    public float downforceStrength = 450f;
 
     [HideInInspector]
     public bool canDrive = false;
@@ -46,8 +46,8 @@ public class CarController : MonoBehaviour
         if (rb != null)
         {
             rb.mass = 798f;
-            rb.linearDamping = 0.05f;
-            rb.angularDamping = 15f;
+            rb.linearDamping = 0.02f;
+            rb.angularDamping = 10f;
             rb.useGravity = true;
             rb.centerOfMass = new Vector3(0, -0.5f, 0);
         }
@@ -60,9 +60,7 @@ public class CarController : MonoBehaviour
         canDrive = true;
 
         if (engineLoopAudio != null)
-        {
             engineLoopAudio.Play();
-        }
     }
 
     void FixedUpdate()
@@ -78,6 +76,7 @@ public class CarController : MonoBehaviour
         float currentSpeed = rb.linearVelocity.magnitude;
         float speedFactor = Mathf.Clamp01(currentSpeed / maxSpeed);
 
+        // Downforce
         rb.AddForce(
             -transform.up *
             currentSpeed *
@@ -85,27 +84,30 @@ public class CarController : MonoBehaviour
             ForceMode.Force
         );
 
+        // Reduce sideways sliding
         Vector3 localVelocity =
             transform.InverseTransformDirection(
                 rb.linearVelocity
             );
 
-        localVelocity.x *= 0.75f;
+        localVelocity.x *= 0.55f;
 
         rb.linearVelocity =
             transform.TransformDirection(
                 localVelocity
             );
 
+        // Coasting behaviour
         if (Mathf.Abs(move) > 0.05f)
         {
-            rb.linearDamping = 0.05f;
+            rb.linearDamping = 0.02f;
         }
         else
         {
-            rb.linearDamping = 1.5f;
+            rb.linearDamping = 0.15f;
         }
 
+        // Forward throttle
         if (move > 0)
         {
             rb.AddForce(
@@ -115,6 +117,7 @@ public class CarController : MonoBehaviour
                 ForceMode.Acceleration
             );
         }
+        // Brake / Reverse
         else if (move < 0)
         {
             float forwardVelocity =
@@ -143,6 +146,7 @@ public class CarController : MonoBehaviour
             }
         }
 
+        // Speed limiter
         Vector3 horizontalVel =
             new Vector3(
                 rb.linearVelocity.x,
@@ -164,6 +168,7 @@ public class CarController : MonoBehaviour
                 );
         }
 
+        // Steering
         if (currentSpeed > 0.5f &&
             Mathf.Abs(move) > 0.1f)
         {
@@ -176,7 +181,7 @@ public class CarController : MonoBehaviour
             float steeringMultiplier =
                 Mathf.Lerp(
                     1f,
-                    0.55f,
+                    0.75f,
                     speedFactor
                 );
 
@@ -228,7 +233,7 @@ public class CarController : MonoBehaviour
         {
             if (!canDrive)
             {
-                engineLoopAudio.pitch = 0.7f;
+                engineLoopAudio.pitch = minPitch;
             }
             else
             {
