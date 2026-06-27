@@ -233,24 +233,35 @@ public class CarController : MonoBehaviour
 
         if (engineLoopAudio != null && rb != null)
         {
-            if (!canDrive)
+            if (Time.timeScale == 0f)
             {
-                engineLoopAudio.pitch = minPitch;
+                if (engineLoopAudio.isPlaying)
+                    engineLoopAudio.Pause();
             }
             else
             {
-                float speedFactor =
-                    Mathf.Clamp01(
-                        rb.linearVelocity.magnitude /
-                        maxSpeed
-                    );
+                if (!engineLoopAudio.isPlaying && canDrive)
+                    engineLoopAudio.UnPause();
 
-                engineLoopAudio.pitch =
-                    Mathf.Lerp(
-                        minPitch,
-                        maxPitch,
-                        speedFactor
-                    );
+                if (!canDrive)
+                {
+                    engineLoopAudio.pitch = minPitch;
+                }
+                else
+                {
+                    float speedFactor =
+                        Mathf.Clamp01(
+                            rb.linearVelocity.magnitude /
+                            maxSpeed
+                        );
+
+                    engineLoopAudio.pitch =
+                        Mathf.Lerp(
+                            minPitch,
+                            maxPitch,
+                            speedFactor
+                        );
+                }
             }
         }
     }
