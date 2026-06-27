@@ -84,6 +84,11 @@ public class LapTimer : MonoBehaviour
 
             lapHistory.Add(currentLapTime);
 
+            if (HighScoreManager.Instance != null && PlayerManager.Instance != null)
+            {
+                HighScoreManager.Instance.AddScore(PlayerManager.Instance.CurrentPlayerName, currentLapTime);
+            }
+
             // Reset current lap time, but keep running
             currentLapTime = 0f;
         }
