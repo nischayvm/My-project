@@ -21,6 +21,8 @@ public class CarController : MonoBehaviour
 
     public float maxSteerAngle = 30f;
     public float wheelSpinSpeed = 500f;
+    
+    private float currentWheelRotation = 0f;
 
     [Header("Visual Effects")]
     public Camera mainCamera;
@@ -255,68 +257,37 @@ public class CarController : MonoBehaviour
 
     void AnimateWheels(float move, float turn)
     {
-        float steerAngle =
-            turn *
-            maxSteerAngle;
+        float steerAngle = turn * maxSteerAngle;
 
-        if (frontLeftWheel != null)
-        {
-            Vector3 rot =
-                frontLeftWheel.localEulerAngles;
-
-            frontLeftWheel.localRotation =
-                Quaternion.Euler(
-                    rot.x,
-                    steerAngle,
-                    0
-                );
-        }
-
-        if (frontRightWheel != null)
-        {
-            Vector3 rot =
-                frontRightWheel.localEulerAngles;
-
-            frontRightWheel.localRotation =
-                Quaternion.Euler(
-                    rot.x,
-                    steerAngle,
-                    0
-                );
-        }
-
-        float speed =
-            rb != null ?
-            rb.linearVelocity.magnitude :
-            0f;
-
+        float speed = rb != null ? rb.linearVelocity.magnitude : 0f;
         float dir = 1f;
 
         if (rb != null)
         {
-            dir =
-                Vector3.Dot(
-                    rb.linearVelocity,
-                    -transform.forward
-                ) >= 0 ? 1f : -1f;
+            dir = Vector3.Dot(rb.linearVelocity, -transform.forward) >= 0 ? 1f : -1f;
         }
 
-        float spin =
-            speed *
-            dir *
-            (wheelSpinSpeed / maxSpeed) *
-            Time.deltaTime;
+        // Physically accurate wheel rotation: degrees per second based on speed
+        float wheelRadius = 0.33f;
+        float circumference = 2f * Mathf.PI * wheelRadius;
+        float baseSpinDegPerSec = (speed / circumference) * 360f;
+        
+        // Apply the user's wheelSpinSpeed as a multiplier (500 is default, so dividing by 500 normalizes it to 1)
+        float spinDegPerSec = baseSpinDegPerSec * (wheelSpinSpeed / 500f);
+
+        currentWheelRotation += spinDegPerSec * dir * Time.deltaTime;
+        currentWheelRotation %= 360f;
 
         if (frontLeftWheel != null)
-            frontLeftWheel.Rotate(spin, 0, 0);
+            frontLeftWheel.localRotation = Quaternion.Euler(currentWheelRotation, steerAngle, 0);
 
         if (frontRightWheel != null)
-            frontRightWheel.Rotate(spin, 0, 0);
+            frontRightWheel.localRotation = Quaternion.Euler(currentWheelRotation, steerAngle, 0);
 
         if (rearLeftWheel != null)
-            rearLeftWheel.Rotate(spin, 0, 0);
+            rearLeftWheel.localRotation = Quaternion.Euler(currentWheelRotation, 0, 0);
 
         if (rearRightWheel != null)
-            rearRightWheel.Rotate(spin, 0, 0);
+            rearRightWheel.localRotation = Quaternion.Euler(currentWheelRotation, 0, 0);
     }
 }
