@@ -20,9 +20,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: F1 Red Body
+  m_Name: PlayerCar_Mat
   m_Shader: {fileID: 4800000, guid: 8d2bb70cbf9db8d4da26e15b26e74248, type: 3}
-  m_Parent: {fileID: 2100000, guid: 0abd5f90a0661f04380b7e9be2413e97, type: 2}
+  m_Parent: {fileID: 2100000, guid: b919de0c8f633f6459774f1ef659e332, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _GLOSSINESS_FROM_BASE_ALPHA
@@ -45,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8f038a53e723a85489b3fdce317dabfc, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -54,8 +54,8 @@ Material:
     - _Smoothness: 0.25654158
     - _SpecularHighlights: 0
     m_Colors:
-    - _BaseColor: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 0.25654158}
-    - _Color: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 0.25654158}
+    - _BaseColor: {r: 0.28235295, g: 0.36078432, b: 0.19215688, a: 0.25654158}
+    - _Color: {r: 0.28235292, g: 0.3607843, b: 0.19215685, a: 0.25654158}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

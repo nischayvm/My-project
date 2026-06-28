@@ -70,12 +70,29 @@ public class CarController : MonoBehaviour
         if (!canDrive || rb == null)
             return;
 
+        bool outOfFuel = FuelManager.Instance != null &&
+                         FuelManager.Instance.currentFuel <= 0f;
+
         float move = Input.GetAxis("Vertical");
         float turn = Input.GetAxis("Horizontal");
 
         Vector3 forwardDir = -transform.forward;
 
         float currentSpeed = rb.linearVelocity.magnitude;
+
+        // Consume fuel based on speed
+        if (FuelManager.Instance != null && FuelManager.Instance.currentFuel > 0f)
+        {
+            FuelManager.Instance.currentFuel -=
+                currentSpeed * FuelManager.Instance.fuelBurnRate * Time.fixedDeltaTime;
+
+            FuelManager.Instance.currentFuel =
+                Mathf.Clamp(
+                    FuelManager.Instance.currentFuel,
+                    0f,
+                    FuelManager.Instance.maxFuel
+                );
+        }
         float speedFactor = Mathf.Clamp01(currentSpeed / maxSpeed);
 
         // Downforce
@@ -110,7 +127,7 @@ public class CarController : MonoBehaviour
         }
 
         // Forward throttle
-        if (move > 0)
+        if (!outOfFuel && move > 0)
         {
             rb.AddForce(
                 forwardDir *
@@ -120,7 +137,7 @@ public class CarController : MonoBehaviour
             );
         }
         // Brake / Reverse
-        else if (move < 0)
+        else if (!outOfFuel && move < 0)
         {
             float forwardVelocity =
                 Vector3.Dot(
