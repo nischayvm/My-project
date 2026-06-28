@@ -288,17 +288,16 @@ public class CarController : MonoBehaviour
 
         currentWheelRotation += spinDegPerSec * dir * Time.deltaTime;
         currentWheelRotation %= 360f;
-
         if (frontLeftWheel != null)
-            frontLeftWheel.localRotation = Quaternion.Euler(currentWheelRotation, steerAngle, 0);
+            frontLeftWheel.localRotation = Quaternion.Euler(-currentWheelRotation, steerAngle, 0);
 
         if (frontRightWheel != null)
-            frontRightWheel.localRotation = Quaternion.Euler(currentWheelRotation, steerAngle, 0);
+            frontRightWheel.localRotation = Quaternion.Euler(-currentWheelRotation, steerAngle, 0);
 
         if (rearLeftWheel != null)
-            rearLeftWheel.localRotation = Quaternion.Euler(currentWheelRotation, 0, 0);
+            rearLeftWheel.localRotation = Quaternion.Euler(-currentWheelRotation, 0, 0);
 
         if (rearRightWheel != null)
-            rearRightWheel.localRotation = Quaternion.Euler(currentWheelRotation, 0, 0);
+            rearRightWheel.localRotation = Quaternion.Euler(-currentWheelRotation, 0, 0);
     }
 }
