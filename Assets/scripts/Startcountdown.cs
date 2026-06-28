@@ -10,6 +10,9 @@ public class StartCountdown : MonoBehaviour
 
     public AudioSource engineRoarAudio;
 
+    // Drag the marshal here in the Inspector
+    public Animator marshalAnimator;
+
     IEnumerator Start()
     {
         carController.canDrive = false;
@@ -29,6 +32,12 @@ public class StartCountdown : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         countdownText.text = "GO!";
+
+        // Make the marshal wave
+        if (marshalAnimator != null)
+        {
+            marshalAnimator.SetTrigger("Wave");
+        }
 
         carController.StartRace();
         lapTimer.StartTimer();
