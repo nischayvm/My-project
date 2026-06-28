@@ -21,7 +21,7 @@ public class CarController : MonoBehaviour
 
     public float maxSteerAngle = 30f;
     public float wheelSpinSpeed = 500f;
-    
+
     private float currentWheelRotation = 0f;
 
     [Header("Visual Effects")]
@@ -299,7 +299,7 @@ public class CarController : MonoBehaviour
         float wheelRadius = 0.33f;
         float circumference = 2f * Mathf.PI * wheelRadius;
         float baseSpinDegPerSec = (speed / circumference) * 360f;
-        
+
         // Apply the user's wheelSpinSpeed as a multiplier (500 is default, so dividing by 500 normalizes it to 1)
         float spinDegPerSec = baseSpinDegPerSec * (wheelSpinSpeed / 500f);
 
